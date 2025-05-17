@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job application Home</title>
+    <%-include('cdn.ejs')%>
+  </head>
+  <body>
+    <h1 class="my-4 text-center text-warning">
+      Home page for: Job application management system
+    </h1>
+    <hr>
+    <div class="container my-5">
+      <div class="w-100 text-center">
+        <a href="/applications" class="btn btn-light fw-bold px-3 mb-5">Click to see the list of applications</a>
+      </div>
+
+      <div class="row justify-content-center w-100">
+        <div class="col-md-9 col-lg-7">
+          <form
+            method="POST"
+            class="w-100 rounded-1 p-4 border bg-white"
+            action="/saveform"
+            enctype="multipart/form-data"
+          >
+            <label class="mb-4 d-block">
+              <span class="form-label">Your name</span>
+              <input
+                required
+                name="name"
+                type="text"
+                class="form-control w-75"
+              />
+            </label>
+
+            <label class="mb-4 d-block">
+              <span class="form-label">Email address</span>
+              <input
+                required
+                name="email"
+                type="email"
+                class="form-control w-75"
+              />
+            </label>
+
+            <label class="mb-4 d-block">
+              <span class="form-label">Position Applied For:</span>
+              <select required name="position" class="form-select w-50">
+                <option>Frontend</option>
+                <option>Backend</option>
+                <option>Full Stack</option>
+              </select>
+            </label>
+
+            <label class="mb-4 d-block">
+              <span class="form-label">Years of experience</span>
+              <select required name="experience" class="form-select w-50">
+                <option>Less than a year</option>
+                <option>1 - 2 years</option>
+                <option>2 - 4 years</option>
+                <option>4 - 7 years</option>
+                <option>7 - 10 years</option>
+                <option>10+ years</option>
+              </select>
+            </label>
+
+            <label class="mb-4 d-block">
+              <span class="form-label">Tell us more about yourself</span>
+              <textarea name="message" class="form-control" rows="3"></textarea>
+            </label>
+
+            <label class="mb-4 d-block">
+              <span class="form-label">Your CV</span>
+              <input
+                required
+                name="cv"
+                id="cv"
+                type="file"
+                accept=".pdf"
+                class="form-control w-50"
+              />
+              <div class="file-info" id="pdfInfo"></div>
+            </label>
+
+            <div class="mb-3 text-center">
+              <button type="submit" class="btn btn-success px-3 rounded-3">
+                Apply
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      function handleFileSelect(event, infoElementId) {
+        const file = event.target.files[0];
+        const infoElement = document.getElementById(infoElementId);
+        const maxSize = 2 * 1024 * 1024;
+    
+        if (file) {
+          if (file.size > maxSize) {
+            infoElement.textContent = 'Error: File size exceeds 2 MB limit.';
+            infoElement.style.color = 'red';
+            event.target.value = '';
+          } else {
+            infoElement.textContent = `Selected file: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+            infoElement.style.color = 'initial';
+          }
+        } else {
+          infoElement.textContent = '';
+        }
+      }
+    
+      document.getElementById('cv').addEventListener('change', (e) => handleFileSelect(e, 'pdfInfo'));
+
+    </script>
+    
+  </body>
+</html>

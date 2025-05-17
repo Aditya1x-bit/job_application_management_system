@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Application</title>
+  <%- include('cdn.ejs') %>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center w-100">
+      <div class="col-md-9 col-lg-7">
+        <form
+          method="POST"
+          class="w-100 rounded-1 p-4 border bg-white"
+          action="/updateform"
+          enctype="multipart/form-data"
+        >
+          <input type="hidden" name="id" value="<%- data.id %>">
+
+          <label class="mb-4 d-block" for="name">
+            <span class="form-label">Edit name</span>
+            <input
+              required
+              id="name"
+              name="name"
+              type="text"
+              class="form-control w-75"
+              value="<%- data.name %>"
+            />
+          </label>
+
+          <label class="mb-4 d-block" for="email">
+            <span class="form-label">Edit Email address</span>
+            <input
+              required
+              id="email"
+              name="email"
+              type="email"
+              class="form-control w-75"
+              value="<%- data.email %>"
+            />
+          </label>
+
+          <label class="mb-4 d-block">
+            <span class="form-label">Position Applied For:</span>
+            <select required name="position" class="form-select w-50">
+              <option <%= data.position === "Frontend" ? "selected" : "" %>>Frontend</option>
+              <option <%= data.experience === "Backend" ? "selected" : "" %>>Backend</option>
+              <option <%= data.experience === "Full Stack" ? "selected" : "" %>>Full Stack</option>
+            </select>
+          </label>
+
+          <label class="mb-4 d-block" for="experience">
+            <span class="form-label">Edit Years of experience</span>
+            <select required id="experience" name="experience" class="form-select w-50">
+              <option <%= data.experience === "Less than a year" ? "selected" : "" %>>Less than a year</option>
+              <option <%= data.experience === "1 - 2 years" ? "selected" : "" %>>1 - 2 years</option>
+              <option <%= data.experience === "2 - 4 years" ? "selected" : "" %>>2 - 4 years</option>
+              <option <%= data.experience === "4 - 7 years" ? "selected" : "" %>>4 - 7 years</option>
+              <option <%= data.experience === "7 - 10 years" ? "selected" : "" %>>7 - 10 years</option>
+              <option <%= data.experience === "10+ years" ? "selected" : "" %>>10+ years</option>
+            </select>
+          </label>
+
+          <label class="mb-4 d-block" for="message">
+            <span class="form-label">Edit your self description</span>
+            <textarea
+              id="message"
+              name="message"
+              class="form-control"
+              rows="3"
+            ><%- data.message %></textarea>
+          </label>
+          <input type="hidden" name="file1" value="<%-data.file%>">
+          <a href="/uploads/<%-data.file%>" target="_blank" class="d-block btn btn-light">Download originally uploaded CV</a>
+          <label class="mb-4 d-block" for="cv">
+            <span class="form-label">Upload new CV</span>
+            <input
+              id="cv"
+              name="cv"
+              type="file"
+              accept=".pdf"
+              class="form-control w-50"
+            />
+            <div class="file-info" id="pdfInfo"></div>
+          </label>
+
+          <div class="mb-3 text-center">
+            <button type="submit" class="btn btn-success px-3 rounded-3" onclick="return confirm('Do you want make these changes to the application?')">
+              Update application details
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    function handleFileSelect(event, infoElementId) {
+      const file = event.target.files[0];
+      const infoElement = document.getElementById(infoElementId);
+      const maxSize = 2 * 1024 * 1024;
+  
+      if (file) {
+        if (file.size > maxSize) {
+          infoElement.textContent = 'Error: File size exceeds 2 MB limit.';
+          infoElement.style.color = 'red';
+          event.target.value = '';
+        } else {
+          infoElement.textContent = `Selected file: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+          infoElement.style.color = 'initial';
+        }
+      } else {
+        infoElement.textContent = '';
+      }
+    }
+  
+    document.getElementById('cv').addEventListener('change', (e) => handleFileSelect(e, 'pdfInfo'));
+
+  </script>
+</body>
+</html>
